@@ -153,4 +153,4 @@ public class FriendDicActivity extends AppCompatActivity{
     }
 }
 
-//ddd
+//hi
