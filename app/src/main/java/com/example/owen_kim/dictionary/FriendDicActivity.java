@@ -63,7 +63,6 @@ public class FriendDicActivity extends AppCompatActivity{
         userId = getIntent().getStringExtra("user_id");
 
         addFriend = (Button) findViewById(R.id.addFriend);
-        deleteFriend = (Button) findViewById(R.id.deleteFriend);
         listView = (ListView) findViewById(R.id.fr_listview);
 
         listView.setAdapter(adpater);
@@ -100,7 +99,7 @@ public class FriendDicActivity extends AppCompatActivity{
         };
         thread.start();
 
-
+/*
 
         addFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,14 +142,15 @@ public class FriendDicActivity extends AppCompatActivity{
             }
         });
 
-        //삭제버튼
+
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            });
+                return false;
+            }
         });
+        */
     }
 }
 
-}
+
