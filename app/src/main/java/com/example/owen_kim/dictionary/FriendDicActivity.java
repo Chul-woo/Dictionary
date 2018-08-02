@@ -149,8 +149,6 @@ public class FriendDicActivity extends AppCompatActivity{
                 return false;
             }
         });
-        *///////////////
+        */
     }
 }
-
-//ddd
