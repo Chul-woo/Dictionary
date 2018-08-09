@@ -153,4 +153,4 @@ public class FriendDicActivity extends AppCompatActivity{
     }
 }
 
-//fsdfsaf
+//태현 하이루
