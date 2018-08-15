@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.owen_kim.dictionary.APIS.User;
+import com.example.owen_kim.dictionary.Game.Stage1Activity;
+import com.example.owen_kim.dictionary.Game.Stage2Activity;
+import com.example.owen_kim.dictionary.Game.Stage3Activity;
 
 
 public class GameActivity extends AppCompatActivity {
@@ -35,10 +37,9 @@ public class GameActivity extends AppCompatActivity {
         bt_stage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameActivity.this, GameActivity.class);
+                Intent intent = new Intent(GameActivity.this, Stage1Activity.class);
                 intent.putExtra("user_id", user_id);
                 startActivity(intent);
-
             }
 
         });
@@ -47,10 +48,9 @@ public class GameActivity extends AppCompatActivity {
         bt_stage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameActivity.this, GameActivity.class);
+                Intent intent = new Intent(GameActivity.this, Stage2Activity.class);
                 intent.putExtra("user_id", user_id);
                 startActivity(intent);
-
             }
         });
 
@@ -58,10 +58,9 @@ public class GameActivity extends AppCompatActivity {
         bt_stage3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameActivity.this, GameActivity.class);
+                Intent intent = new Intent(GameActivity.this, Stage3Activity.class);
                 intent.putExtra("user_id", user_id);
                 startActivity(intent);
-
             }
         });
     }
