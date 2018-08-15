@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Game.Stage1Activity">
+    tools:context=".Game.Stage2Activity">
 
     <Button
         android:id="@+id/M"
@@ -319,4 +319,5 @@
         android:text="정답확인"
         tools:layout_editor_absoluteX="263dp"
         tools:layout_editor_absoluteY="322dp" />
+
 </android.support.constraint.ConstraintLayout>
