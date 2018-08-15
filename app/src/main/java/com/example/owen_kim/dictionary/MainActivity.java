@@ -113,6 +113,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //게임화면 액티비티 이동
+        bt_Game.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
+
+            }
+        });
         //나의 사전 버튼 눌렀을때 액티비티 이동
         bt_MyDic.setOnClickListener(new View.OnClickListener() {
             @Override

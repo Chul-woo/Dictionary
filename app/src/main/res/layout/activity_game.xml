@@ -6,29 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="stage1"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="122dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="stage2"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="244dp" />
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stage1"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="122dp" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="stage3"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="362dp" />
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stage2"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="246dp" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stage3"
+            tools:layout_editor_absoluteX="148dp"
+            tools:layout_editor_absoluteY="362dp" />
+    </LinearLayout>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

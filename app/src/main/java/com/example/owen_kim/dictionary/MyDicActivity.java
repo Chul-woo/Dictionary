@@ -98,10 +98,6 @@ public class MyDicActivity extends AppCompatActivity{
         };
         thread.start();
 
-
-
-
-
         myListAdapter = new MyListAdapter(MyDicActivity.this,list_itemArrayList);
         listView.setAdapter(myListAdapter);
     }
