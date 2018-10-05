@@ -5,12 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.owen_kim.dictionary.R;
 
 public class CardGameView extends View {
+    MediaPlayer m_Sound_BackGround; //배경 음악
+
     public static final int STATE_READY = 0; // 게임 시작 전 준비 상태
     public static final int STATE_GAME = 1; // 게임 중
     public static final int STATE_END = 2; // 게임 종료
@@ -33,6 +37,13 @@ public class CardGameView extends View {
 
     public CardGameView(Context context) {
         super(context);
+        //MediaPlayer를 이용해서 리소스 로드
+        m_Sound_BackGround = MediaPlayer.create(context, R.raw.pororo);
+        m_Sound_BackGround.start();
+
+        //  키 입력을 위해 포커스를 줍니다.
+        setFocusable(true);
+
         m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.background);
         m_Card_Backside = BitmapFactory.decodeResource(getResources(), R.drawable.backside);
         m_Card_Red = BitmapFactory.decodeResource(getResources(), R.drawable.front_red);
@@ -49,6 +60,21 @@ public class CardGameView extends View {
         // 짝맞추기를 검사하는 스레드 실행
         CardGameThread _thread = new CardGameThread(this);
         _thread.start();
+    }
+
+    @Override
+    public boolean onKeyDown(int KeyCode, KeyEvent event) {
+        // 스페이스 바를 눌렀을 때 배경음 일시 정지/다시 재생
+        if(KeyCode == KeyEvent.KEYCODE_SPACE){
+            if (m_Sound_BackGround.isPlaying())
+                m_Sound_BackGround.pause();
+            else
+                m_Sound_BackGround.start();
+
+            // 화면을 갱신시킵니다.
+            //invalidate();
+        }
+        return super.onKeyDown(KeyCode, event);
     }
 
     @Override
