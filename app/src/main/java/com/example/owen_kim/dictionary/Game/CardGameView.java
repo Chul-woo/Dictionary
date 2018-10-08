@@ -44,8 +44,8 @@ public class CardGameView extends View {
         //  키 입력을 위해 포커스를 줍니다.
         setFocusable(true);
 
-        m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.background);
-        m_Card_Backside = BitmapFactory.decodeResource(getResources(), R.drawable.backside);
+        m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.pororo);
+        m_Card_Backside = BitmapFactory.decodeResource(getResources(), R.drawable.lion);
         m_Card_Red = BitmapFactory.decodeResource(getResources(), R.drawable.front_red);
         m_Card_Blue = BitmapFactory.decodeResource(getResources(), R.drawable.front_blue);
         m_Card_Green = BitmapFactory.decodeResource(getResources(), R.drawable.front_green);
@@ -91,15 +91,15 @@ public class CardGameView extends View {
                     m_Shuffle[x][y].m_state == Card.CARD_MATCHED) {
                 // 가지고 있는 색상 값에 따라 다른 이미지 그려주기
                 if (m_Shuffle[x][y].m_Color == Card.IMG_RED)
-                    canvas.drawBitmap(m_Card_Red, 50 + x * 140, 210 + y * 190, null);
+                    canvas.drawBitmap(m_Card_Red, 170 + x * 250, 230 + y * 360, null);
                 else if (m_Shuffle[x][y].m_Color == Card.IMG_GREEN)
-                    canvas.drawBitmap(m_Card_Green, 50 + x * 140, 210 + y * 190, null);
+                    canvas.drawBitmap(m_Card_Green, 170 + x * 250, 230 + y * 360, null);
                 else if (m_Shuffle[x][y].m_Color == Card.IMG_BLUE)
-                    canvas.drawBitmap(m_Card_Blue, 50 + x * 140, 210 + y * 190, null);
+                    canvas.drawBitmap(m_Card_Blue, 170 + x * 250, 230 + y * 360, null);
             }
             // 카드의 뒷면을 그려야 하는 경우
             else
-                canvas.drawBitmap(m_Card_Backside, 50 + x * 140, 210 + y * 190, null);
+                canvas.drawBitmap(m_Card_Backside, 170 + x * 250, 230 + y * 360, null);
         }
     }
 
@@ -143,8 +143,8 @@ public class CardGameView extends View {
             for (int y = 0; y < 2; y++) {
                 for (int x = 0; x < 3; x++) {
                     //각 카드의 박스 값을 생성
-                    Rect box_card = new Rect(50 + x * 140, 210 + y * 190,
-                            50 + x * 140 + 80 , 210 + y * 190 + 115);
+                    Rect box_card = new Rect(170 + x * 250, 230 + y * 360,
+                            170 + x * 250 + 80 , 230 + y * 360 + 115);
                     if (box_card.contains(px, py)) {
                         // (x,y)에 위치한 카드가 선택되었습니다.
                         if (m_Shuffle[x][y].m_state != Card.CARD_MATCHED)
