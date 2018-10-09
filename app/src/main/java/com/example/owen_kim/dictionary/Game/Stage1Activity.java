@@ -22,7 +22,7 @@ public class Stage1Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(new CardGameView(this));
     }
 
 }

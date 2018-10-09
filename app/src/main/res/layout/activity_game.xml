@@ -11,6 +11,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="제한시간 내에 그림과 일치하는 단어의 짝을 찾아 선택하세요"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/stage1"
             android:layout_width="match_parent"
@@ -34,6 +42,7 @@
             android:text="@string/stage3"
             tools:layout_editor_absoluteX="148dp"
             tools:layout_editor_absoluteY="362dp" />
+
     </LinearLayout>
 
     <android.support.constraint.Guideline
