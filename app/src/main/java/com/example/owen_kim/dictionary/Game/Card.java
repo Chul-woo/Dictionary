@@ -6,15 +6,21 @@ public class Card {
     public static final int CARD_CLOSE = 1;
     public static final int CARD_PLAYEROPEN = 2;
     public static final int CARD_MATCHED = 3;
-    public static final int IMG_RED = 1;
-    public static final int IMG_GREEN = 2;
-    public static final int IMG_BLUE = 3;
+
+    public static final int IMG_BOOK = 1;
+    public static final double WORD_BOOK = 1.5;
+
+    public static final int IMG_CHAIR = 2;
+    public static final double WORD_CHAIR = 2.5;
+
+    public static final int IMG_NOTEBOOK = 3;
+    public static final double WORD_NOTEBOOK = 3.5;
 
     // 카드 정보
     public int m_state;
-    public int m_Color;
+    public double m_Color;
 
-    public Card(int _Color){
+    public Card(double _Color){
         m_state = CARD_SHOW;
         m_Color = _Color;
     }

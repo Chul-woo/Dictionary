@@ -24,9 +24,12 @@ public class CardGameView extends View {
 
     Bitmap m_Card_Backside;
     Bitmap m_BackGroundImage;
-    Bitmap m_Card_Red;
-    Bitmap m_Card_Blue;
-    Bitmap m_Card_Green;
+    Bitmap m_Card_Picture_Book;
+    Bitmap m_Card_Picture_Chair;
+    Bitmap m_Card_Picture_Notebook;
+    Bitmap m_Card_Word_Book;
+    Bitmap m_Card_Word_Chair;
+    Bitmap m_Card_Word_Notebook;
 
     // 화면에 표시할 카드
     Card m_Shuffle[][];
@@ -46,13 +49,17 @@ public class CardGameView extends View {
 
         m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.pororo);
         m_Card_Backside = BitmapFactory.decodeResource(getResources(), R.drawable.lion);
-        m_Card_Red = BitmapFactory.decodeResource(getResources(), R.drawable.front_red);
-        m_Card_Blue = BitmapFactory.decodeResource(getResources(), R.drawable.front_blue);
-        m_Card_Green = BitmapFactory.decodeResource(getResources(), R.drawable.front_green);
+        m_Card_Picture_Book = BitmapFactory.decodeResource(getResources(), R.drawable.picturebook);
+        m_Card_Picture_Chair = BitmapFactory.decodeResource(getResources(), R.drawable.picturechair);
+        m_Card_Picture_Notebook = BitmapFactory.decodeResource(getResources(), R.drawable.picturenotebook);
+        m_Card_Word_Book = BitmapFactory.decodeResource(getResources(), R.drawable.wordbook);
+        m_Card_Word_Chair = BitmapFactory.decodeResource(getResources(), R.drawable.wordchair);
+        m_Card_Word_Notebook  = BitmapFactory.decodeResource(getResources(), R.drawable.wordnotebook);
+
 
         //화면에 표시할 카드만큼 할당받음(2X3)
         m_Shuffle = new Card[3][2];
-        m_Shuffle[0][0] = new Card(Card.IMG_RED);
+        m_Shuffle[0][0] = new Card(Card.IMG_BOOK);
 
         // 카드 섞기
         SetCardShuffle();
@@ -90,12 +97,18 @@ public class CardGameView extends View {
                     m_Shuffle[x][y].m_state == Card.CARD_PLAYEROPEN ||
                     m_Shuffle[x][y].m_state == Card.CARD_MATCHED) {
                 // 가지고 있는 색상 값에 따라 다른 이미지 그려주기
-                if (m_Shuffle[x][y].m_Color == Card.IMG_RED)
-                    canvas.drawBitmap(m_Card_Red, 170 + x * 250, 230 + y * 360, null);
-                else if (m_Shuffle[x][y].m_Color == Card.IMG_GREEN)
-                    canvas.drawBitmap(m_Card_Green, 170 + x * 250, 230 + y * 360, null);
-                else if (m_Shuffle[x][y].m_Color == Card.IMG_BLUE)
-                    canvas.drawBitmap(m_Card_Blue, 170 + x * 250, 230 + y * 360, null);
+                if (m_Shuffle[x][y].m_Color == Card.IMG_BOOK)
+                    canvas.drawBitmap(m_Card_Picture_Book, 170 + x * 250, 230 + y * 360, null);
+                else if (m_Shuffle[x][y].m_Color == Card.IMG_CHAIR)
+                    canvas.drawBitmap(m_Card_Picture_Notebook, 170 + x * 250, 230 + y * 360, null);
+                else if (m_Shuffle[x][y].m_Color == Card.IMG_NOTEBOOK)
+                    canvas.drawBitmap(m_Card_Picture_Chair, 170 + x * 250, 230 + y * 360, null);
+                else if (m_Shuffle[x][y].m_Color == Card.WORD_BOOK)
+                    canvas.drawBitmap(m_Card_Word_Book, 170 + x * 250, 230 + y * 360, null);
+                else if (m_Shuffle[x][y].m_Color == Card.WORD_CHAIR)
+                    canvas.drawBitmap(m_Card_Word_Chair, 170 + x * 250, 230 + y * 360, null);
+                else if (m_Shuffle[x][y].m_Color == Card.WORD_NOTEBOOK)
+                    canvas.drawBitmap(m_Card_Word_Notebook, 170 + x * 250, 230 + y * 360, null);
             }
             // 카드의 뒷면을 그려야 하는 경우
             else
@@ -105,12 +118,12 @@ public class CardGameView extends View {
 
     public void SetCardShuffle() {
         // 각각의 색을 가진 카드들을 생성
-        m_Shuffle[0][0] = new Card(Card.IMG_RED);
-        m_Shuffle[0][1] = new Card(Card.IMG_BLUE);
-        m_Shuffle[1][0] = new Card(Card.IMG_GREEN);
-        m_Shuffle[1][1] = new Card(Card.IMG_GREEN);
-        m_Shuffle[2][0] = new Card(Card.IMG_BLUE);
-        m_Shuffle[2][1] = new Card(Card.IMG_RED);
+        m_Shuffle[0][0] = new Card(Card.IMG_BOOK);
+        m_Shuffle[0][1] = new Card(Card.IMG_NOTEBOOK);
+        m_Shuffle[1][0] = new Card(Card.IMG_CHAIR);
+        m_Shuffle[1][1] = new Card(Card.WORD_CHAIR);
+        m_Shuffle[2][0] = new Card(Card.WORD_NOTEBOOK);
+        m_Shuffle[2][1] = new Card(Card.WORD_BOOK);
     }
 
     public void startGame() {
@@ -180,7 +193,7 @@ public class CardGameView extends View {
         if(m_SelectCard_1 == null || m_SelectCard_2 == null)
             return;;
         // 두 카드의 색상을 비교합니다.
-        if(m_SelectCard_1.m_Color == m_SelectCard_2.m_Color){
+        if((int)m_SelectCard_1.m_Color == (int)m_SelectCard_2.m_Color){
             // 두 카드의 색상이 같으면 두 카드를 맞춘 상태로 바꿉니다.
             m_SelectCard_1.m_state = Card.CARD_MATCHED;
             m_SelectCard_2.m_state = Card.CARD_MATCHED;
