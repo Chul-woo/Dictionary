@@ -22,42 +22,7 @@ public class Stage1Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
-        setContentView(R.layout.activity_stage1);
 
-        countdownText= (TextView)findViewById(R.id.countdown_text);
-        countdownButton = (Button)findViewById(R.id.countdown_button);
-
-        countdownButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                start();
-            }
-        });
-    }
-
-    public void start() {
-        countDownTimer = new CountDownTimer(timeLeftInMilliseconds, 500) {
-            @Override
-            public void onTick(long l) {
-                timeLeftInMilliseconds = l;
-                updateTimer();
-            }
-            @Override
-            public void onFinish() {
-            }
-        }.start();
-        timerRunning = true;
-    }
-
-    public void updateTimer() {
-        int seconds = (int)timeLeftInMilliseconds / 1000;
-        String timeLeftText = "";
-        timeLeftText += seconds;
-        countdownText.setText(timeLeftText);
-=======
-        setContentView(new CardGameView(this));
->>>>>>> 9a30f623d8565a4698714ea71ddfefe626bf5810
     }
 
 }
