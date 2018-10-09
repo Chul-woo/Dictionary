@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.owen_kim.dictionary.R;
 
+import static com.android.volley.Request.Method.HEAD;
+
 public class Stage1Activity extends AppCompatActivity {
     private TextView countdownText;
     private Button countdownButton;
@@ -20,6 +22,7 @@ public class Stage1Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         setContentView(R.layout.activity_stage1);
 
         countdownText= (TextView)findViewById(R.id.countdown_text);
@@ -52,6 +55,9 @@ public class Stage1Activity extends AppCompatActivity {
         String timeLeftText = "";
         timeLeftText += seconds;
         countdownText.setText(timeLeftText);
+=======
+        setContentView(new CardGameView(this));
+>>>>>>> 9a30f623d8565a4698714ea71ddfefe626bf5810
     }
 
 }
