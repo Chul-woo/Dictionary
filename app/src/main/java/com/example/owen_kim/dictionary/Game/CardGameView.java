@@ -15,9 +15,12 @@ import android.view.View;
 
 import com.example.owen_kim.dictionary.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 
 public class CardGameView extends View {
     MediaPlayer m_Sound_BackGround; //배경 음악
@@ -60,6 +63,13 @@ public class CardGameView extends View {
     private boolean timerRunning;
     private Paint countdownText = new Paint();
     private String timeLeftText = "";
+    //걸린시간 계산
+    private long now;
+    private Date startTime;
+    private Date endTime;
+    private int clear=0;
+    private Paint recordText = new Paint();
+    private String record;
 
     public CardGameView(Context context) {
         super(context);
@@ -159,11 +169,18 @@ public class CardGameView extends View {
         canvas.drawBitmap(m_BackGroundImage, 0, 0, null);
 
         //시작 버튼, 타이머 그려주기
-        if(timeLeftText == "")
+        if(timeLeftText == "") //시작button
             canvas.drawBitmap(m_Start_Button, 275, 150, null);
-        else if(timeLeftText.equals("START!"))
+        else if(timeLeftText.equals("START!")) // 게임시작text
             canvas.drawText(timeLeftText, 200, 200, countdownText);
-        else {
+        else if(clear==6) { // 게임성공text
+            recordText.setTextSize(50);
+            recordText.setColor(Color.BLUE);
+            canvas.drawText(record, 175, 100, recordText) ;
+            countdownText.setColor(Color.RED);
+            canvas.drawText(timeLeftText, 200, 200, countdownText);
+        }
+        else { // 3,2,1 timerText
             countdownText.setTextSize(100);
             countdownText.setStrokeWidth(10);
             canvas.drawText(timeLeftText, 325, 200, countdownText);
@@ -250,7 +267,7 @@ public class CardGameView extends View {
         }
 
         // 화면을 갱신합니다.
-        invalidate();
+        postInvalidate();
         return true;
     }
 
@@ -266,6 +283,14 @@ public class CardGameView extends View {
             // 다시 선택할 수 있게 null 값을 넣습니다.
             m_SelectCard_1 = null;
             m_SelectCard_2 = null;
+            clear += 2;
+            if(clear==6) {
+                timeLeftText = "CLEAR!";
+                now = System.currentTimeMillis();
+                endTime = new Date(now);
+                float duration = (endTime.getTime()-startTime.getTime())/(float)1000;
+                record = "your record: " + duration;
+            }
         }
         else {
             // 두 카드의 색상이 다른 경우 대기 시간을 주어 결과를 확인하게 합니다.
@@ -305,11 +330,13 @@ public class CardGameView extends View {
         timeLeftText = ""+seconds;
         if(timeLeftText.equals("0")) {
             timeLeftText = "START!";
-            startGame(); //게임을 시작합니다.
+            now = System.currentTimeMillis();
+            startTime = new Date(now);
             m_state = STATE_GAME;
+            startGame(); //게임을 시작합니다.
         }
         else
-            invalidate();
+            postInvalidate();
     }
 
 }
