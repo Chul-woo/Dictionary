@@ -8,7 +8,8 @@ public class CardGameThread extends Thread {
     }
 
     public void run(){
-        while(true)
+        while(true) {
             m_View.checkMatch();
+        }
     }
 }

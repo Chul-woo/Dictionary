@@ -31,6 +31,7 @@ public class CardGameView extends View {
 
     // 게임의 상태 값을 저장하는 멤버 변수
     private int m_state = STATE_READY; // 초깃값은 준비 상태
+    private CardGameThread _thread; // 쓰레드
 
     Bitmap m_Card_Backside;
     Bitmap m_BackGroundImage;
@@ -103,7 +104,7 @@ public class CardGameView extends View {
         SetCardShuffle();
 
         // 짝맞추기를 검사하는 스레드 실행
-        CardGameThread _thread = new CardGameThread(this);
+        _thread = new CardGameThread(this);
         _thread.start();
     }
 
@@ -267,7 +268,7 @@ public class CardGameView extends View {
         }
 
         // 화면을 갱신합니다.
-        postInvalidate();
+        invalidate();
         return true;
     }
 
@@ -305,10 +306,9 @@ public class CardGameView extends View {
             // 다시 선택할 수 있게 null 값을 넣습니다.
             m_SelectCard_1 = null;
             m_SelectCard_2 = null;
+            // 화면을 갱신합니다.
+            postInvalidate();
         }
-
-        // 화면을 갱신합니다.
-        postInvalidate();
     }
 
     public void timerStart() {
@@ -336,7 +336,7 @@ public class CardGameView extends View {
             startGame(); //게임을 시작합니다.
         }
         else
-            postInvalidate();
+            invalidate();
     }
 
 }
