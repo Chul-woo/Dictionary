@@ -194,9 +194,7 @@ public class CardGameView extends View {
                 int card_x = 75 + y * 200;
                 int card_y = 250 + x * 300;
                 // 카드의 앞면을 그려야 하는 경우
-                if (m_Shuffle[x][y].m_state == Card.CARD_SHOW ||
-                        m_Shuffle[x][y].m_state == Card.CARD_PLAYEROPEN ||
-                        m_Shuffle[x][y].m_state == Card.CARD_MATCHED) {
+                if (m_Shuffle[x][y].m_state == Card.CARD_SHOW || m_Shuffle[x][y].m_state == Card.CARD_PLAYEROPEN || m_Shuffle[x][y].m_state == Card.CARD_MATCHED) {
                     // 가지고 있는 색상 값에 따라 다른 이미지 그려주기
                     if (m_Shuffle[x][y].m_Color == Card.IMG_BOOK)
                         canvas.drawBitmap(m_Card_Picture_Book, card_x, card_y, null);
@@ -244,16 +242,16 @@ public class CardGameView extends View {
                     Rect box_card = new Rect(card_x, card_y, card_x+card_w, card_y+card_h);
                     if (box_card.contains(px, py)) {
                         // (x,y)에 위치한 카드가 선택되었습니다.
-                        if (m_Shuffle[x][y].m_state != Card.CARD_MATCHED)
-                        // 맞춘 카드는 뒤집을 필요가 없습니다.
-                        if (m_SelectCard_1 == null) { // 첫 카드를 뒤집으려는 것이라면
-                            m_SelectCard_1 = m_Shuffle[x][y];
-                            m_SelectCard_1.m_state = Card.CARD_PLAYEROPEN;
-                        }
-                        else {// 이미 첫 번째 카드가 뒤집혀 있으니 두 번째로 뒤집으려는 거라면
-                            if (m_SelectCard_1 != m_Shuffle[x][y]) {
-                                m_SelectCard_2 = m_Shuffle[x][y];
-                                m_SelectCard_2.m_state = Card.CARD_PLAYEROPEN;
+                        if (m_Shuffle[x][y].m_state != Card.CARD_MATCHED) {
+                            // 맞춘 카드는 뒤집을 필요가 없습니다.
+                            if (m_SelectCard_1 == null) { // 첫 카드를 뒤집으려는 것이라면
+                                m_SelectCard_1 = m_Shuffle[x][y];
+                                m_SelectCard_1.m_state = Card.CARD_PLAYEROPEN;
+                            } else {// 이미 첫 번째 카드가 뒤집혀 있으니 두 번째로 뒤집으려는 거라면
+                                if (m_SelectCard_1 != m_Shuffle[x][y]) {
+                                    m_SelectCard_2 = m_Shuffle[x][y];
+                                    m_SelectCard_2.m_state = Card.CARD_PLAYEROPEN;
+                                }
                             }
                         }
                     }
@@ -281,6 +279,10 @@ public class CardGameView extends View {
             // 두 카드의 색상이 같으면 두 카드를 맞춘 상태로 바꿉니다.
             m_SelectCard_1.m_state = Card.CARD_MATCHED;
             m_SelectCard_2.m_state = Card.CARD_MATCHED;
+
+            // 화면을 갱신합니다.
+            postInvalidate();
+
             // 다시 선택할 수 있게 null 값을 넣습니다.
             m_SelectCard_1 = null;
             m_SelectCard_2 = null;
@@ -303,11 +305,13 @@ public class CardGameView extends View {
             m_SelectCard_1.m_state = Card.CARD_CLOSE;
             m_SelectCard_2.m_state = Card.CARD_CLOSE;
 
+            // 화면을 갱신합니다.
+            postInvalidate();
+
             // 다시 선택할 수 있게 null 값을 넣습니다.
             m_SelectCard_1 = null;
             m_SelectCard_2 = null;
-            // 화면을 갱신합니다.
-            postInvalidate();
+
         }
     }
 
