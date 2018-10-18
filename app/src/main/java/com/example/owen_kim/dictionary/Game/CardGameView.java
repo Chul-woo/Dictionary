@@ -15,12 +15,12 @@ import android.view.View;
 
 import com.example.owen_kim.dictionary.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
+import java.util.Set;
 
 public class CardGameView extends View {
     MediaPlayer m_Sound_BackGround; //배경 음악
@@ -31,20 +31,21 @@ public class CardGameView extends View {
 
     // 게임의 상태 값을 저장하는 멤버 변수
     private int m_state = STATE_READY; // 초깃값은 준비 상태
-    private CardGameThread _thread; // 쓰레드
 
     Bitmap m_Card_Backside;
     Bitmap m_BackGroundImage;
-    Bitmap m_Card_Picture_Book;
-    Bitmap m_Card_Picture_Chair;
-    Bitmap m_Card_Picture_Laptop;
-    Bitmap m_Card_Word_Book;
-    Bitmap m_Card_Word_Chair;
-    Bitmap m_Card_Word_Laptop;
     Bitmap m_Start_Button;
+    Bitmap m_Card_Picture_1;
+    Bitmap m_Card_Picture_2;
+    Bitmap m_Card_Picture_3;
+    Bitmap m_Card_Word_1;
+    Bitmap m_Card_Word_2;
+    Bitmap m_Card_Word_3;
 
     // 화면에 표시할 카드
     Card m_Shuffle[][];
+    List<String> imageSets;
+    List<String> wordSets;
 
     // 짝맞추기 비교를 위한 변수
     private Card m_SelectCard_1 = null; // 첫 번째로 선택한 카드
@@ -81,15 +82,24 @@ public class CardGameView extends View {
         //  키 입력을 위해 포커스를 줍니다.
         setFocusable(true);
 
+        //랜덤으로 3장 뽑기
+        imageSets = new ArrayList<>(Card.imageSets.keySet());
+        Collections.shuffle(imageSets);
+        imageSets = imageSets.subList(0,3);
+        wordSets = new ArrayList<String>();
+        for(String s : imageSets)
+            wordSets.add(s.replace("image", "word"));
+
         m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.pororo);
         m_Card_Backside = BitmapFactory.decodeResource(getResources(), R.drawable.lion);
-        m_Card_Picture_Book = BitmapFactory.decodeResource(getResources(), R.drawable.picturebook);
-        m_Card_Picture_Chair = BitmapFactory.decodeResource(getResources(), R.drawable.picturechair);
-        m_Card_Picture_Laptop = BitmapFactory.decodeResource(getResources(), R.drawable.picturelaptop);
-        m_Card_Word_Book = BitmapFactory.decodeResource(getResources(), R.drawable.wordbook);
-        m_Card_Word_Chair = BitmapFactory.decodeResource(getResources(), R.drawable.wordchair);
-        m_Card_Word_Laptop  = BitmapFactory.decodeResource(getResources(), R.drawable.wordlaptop);
         m_Start_Button = BitmapFactory.decodeResource(getResources(), R.drawable.start_button);
+
+        m_Card_Picture_1 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier(imageSets.get(0), "drawable" , context.getPackageName()));
+        m_Card_Picture_2 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(1), "drawable" , context.getPackageName()));
+        m_Card_Picture_3 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(2), "drawable" , context.getPackageName()));
+        m_Card_Word_1 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(0), "drawable" , context.getPackageName()));
+        m_Card_Word_2 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(1), "drawable" , context.getPackageName()));
+        m_Card_Word_3 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(2), "drawable" , context.getPackageName()));
 
         //이미지 크기 받아오기
         card_w = m_Card_Backside.getWidth();
@@ -104,7 +114,7 @@ public class CardGameView extends View {
         SetCardShuffle();
 
         // 짝맞추기를 검사하는 스레드 실행
-        _thread = new CardGameThread(this);
+        CardGameThread _thread = new CardGameThread(this);
         _thread.start();
     }
 
@@ -116,15 +126,17 @@ public class CardGameView extends View {
                 m_Sound_BackGround.pause();
             else
                 m_Sound_BackGround.start();
-
-            // 화면을 갱신시킵니다.
-            //invalidate();
         }
         return super.onKeyDown(KeyCode, event);
     }
 
     public void SetCardShuffle() {
-        ArrayList<Double> cards = new ArrayList<Double>(Arrays.asList(1.0, 1.5, 2.0, 2.5, 3.0, 3.5));
+        ArrayList<Double> cards = new ArrayList<Double>();
+        for(String s : imageSets) {
+            double c = Card.imageSets.get(s);
+            cards.add(c);
+            cards.add(c+0.5);
+        }
         Collections.shuffle(cards);
         // 각각의 색을 가진 카드들을 생성
         m_Shuffle[0][0] = new Card(cards.get(0));
@@ -196,18 +208,18 @@ public class CardGameView extends View {
                 // 카드의 앞면을 그려야 하는 경우
                 if (m_Shuffle[x][y].m_state == Card.CARD_SHOW || m_Shuffle[x][y].m_state == Card.CARD_PLAYEROPEN || m_Shuffle[x][y].m_state == Card.CARD_MATCHED) {
                     // 가지고 있는 색상 값에 따라 다른 이미지 그려주기
-                    if (m_Shuffle[x][y].m_Color == Card.IMG_BOOK)
-                        canvas.drawBitmap(m_Card_Picture_Book, card_x, card_y, null);
-                    else if (m_Shuffle[x][y].m_Color == Card.IMG_CHAIR)
-                        canvas.drawBitmap(m_Card_Picture_Chair, card_x, card_y, null);
-                    else if (m_Shuffle[x][y].m_Color == Card.IMG_LAPTOP)
-                        canvas.drawBitmap(m_Card_Picture_Laptop, card_x, card_y, null);
-                    else if (m_Shuffle[x][y].m_Color == Card.WORD_BOOK)
-                        canvas.drawBitmap(m_Card_Word_Book, card_x, card_y, null);
-                    else if (m_Shuffle[x][y].m_Color == Card.WORD_CHAIR)
-                        canvas.drawBitmap(m_Card_Word_Chair, card_x, card_y, null);
-                    else if (m_Shuffle[x][y].m_Color == Card.WORD_LAPTOP)
-                        canvas.drawBitmap(m_Card_Word_Laptop, card_x, card_y, null);
+                    if (m_Shuffle[x][y].m_Color == Card.imageSets.get(imageSets.get(0)))
+                        canvas.drawBitmap(m_Card_Picture_1, card_x, card_y, null);
+                    else if (m_Shuffle[x][y].m_Color == Card.imageSets.get(imageSets.get(1)))
+                        canvas.drawBitmap(m_Card_Picture_2, card_x, card_y, null);
+                    else if (m_Shuffle[x][y].m_Color == Card.imageSets.get(imageSets.get(2)))
+                        canvas.drawBitmap(m_Card_Picture_3, card_x, card_y, null);
+                    else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(0)))
+                        canvas.drawBitmap(m_Card_Word_1, card_x, card_y, null);
+                    else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(1)))
+                        canvas.drawBitmap(m_Card_Word_2, card_x, card_y, null);
+                    else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(2)))
+                        canvas.drawBitmap(m_Card_Word_3, card_x, card_y, null);
                 }
                 // 카드의 뒷면을 그려야 하는 경우
                 else
@@ -240,10 +252,10 @@ public class CardGameView extends View {
                     int card_y = 250 + x * 300;
                     //각 카드의 박스 값을 생성
                     Rect box_card = new Rect(card_x, card_y, card_x+card_w, card_y+card_h);
+                    // (x,y)에 위치한 카드가 선택되었습니다.
                     if (box_card.contains(px, py)) {
-                        // (x,y)에 위치한 카드가 선택되었습니다.
+                        // 맞춘 카드는 뒤집을 필요가 없습니다.
                         if (m_Shuffle[x][y].m_state != Card.CARD_MATCHED) {
-                            // 맞춘 카드는 뒤집을 필요가 없습니다.
                             if (m_SelectCard_1 == null) { // 첫 카드를 뒤집으려는 것이라면
                                 m_SelectCard_1 = m_Shuffle[x][y];
                                 m_SelectCard_1.m_state = Card.CARD_PLAYEROPEN;
