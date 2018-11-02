@@ -8,11 +8,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
+import com.example.owen_kim.dictionary.APIS.BackPressCloseSystem;
 import com.example.owen_kim.dictionary.R;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ import java.util.Set;
 
 public class CardGameView extends View {
     MediaPlayer m_Sound_BackGround; //배경 음악
+    private BackPressCloseSystem backPressCloseSystem;
 
     public static final int STATE_READY = 0; // 게임 시작 전 준비 상태
     public static final int STATE_GAME = 1; // 게임 중
@@ -41,6 +45,8 @@ public class CardGameView extends View {
     Bitmap m_Card_Word_1;
     Bitmap m_Card_Word_2;
     Bitmap m_Card_Word_3;
+    Bitmap music_start;
+    Bitmap music_pause;
 
     // 화면에 표시할 카드
     Card m_Shuffle[][];
@@ -73,6 +79,8 @@ public class CardGameView extends View {
     private Paint recordText = new Paint();
     private String record;
 
+    private Button button1;
+
     public CardGameView(Context context) {
         super(context);
         //MediaPlayer를 이용해서 리소스 로드
@@ -93,6 +101,8 @@ public class CardGameView extends View {
         m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.pororo);
         m_Card_Backside = BitmapFactory.decodeResource(getResources(), R.drawable.lion);
         m_Start_Button = BitmapFactory.decodeResource(getResources(), R.drawable.start_button);
+        music_start = BitmapFactory.decodeResource(getResources(), R.drawable.start);
+        music_pause = BitmapFactory.decodeResource(getResources(), R.drawable.pause);
 
         m_Card_Picture_1 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier(imageSets.get(0), "drawable" , context.getPackageName()));
         m_Card_Picture_2 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(1), "drawable" , context.getPackageName()));
@@ -120,13 +130,12 @@ public class CardGameView extends View {
 
     @Override
     public boolean onKeyDown(int KeyCode, KeyEvent event) {
-        // 스페이스 바를 눌렀을 때 배경음 일시 정지/다시 재생
-        if(KeyCode == KeyEvent.KEYCODE_SPACE){
-            if (m_Sound_BackGround.isPlaying())
+        if(m_Sound_BackGround.isPlaying()){
+            if(KeyCode == KeyEvent.KEYCODE_BACK ) { //BackKey 다운일 경우만 처리
                 m_Sound_BackGround.pause();
-            else
-                m_Sound_BackGround.start();
+            }
         }
+
         return super.onKeyDown(KeyCode, event);
     }
 
@@ -199,6 +208,10 @@ public class CardGameView extends View {
             canvas.drawText(timeLeftText, 325, 200, countdownText);
         }
 
+        //배경음악 시작, 정지 버튼 그리기
+        canvas.drawBitmap(music_start, 75, 7, null);
+        canvas.drawBitmap(music_pause, 200, 0, null);
+
         // 카드들을 그려주기 for
         for (int x = 0; x < 2; x++) {
             for (int y = 0; y < 3; y++) {
@@ -230,8 +243,23 @@ public class CardGameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        //배경음악 시작, 멈춤 버튼
         int px = (int) event.getX();
         int py = (int) event.getY();
+        if(m_Sound_BackGround.isPlaying()){
+            Rect music_btutton = new Rect(200, 0, 300, 100);
+            if (music_btutton.contains(px, py))
+            m_Sound_BackGround.pause();
+        }
+
+        else{
+            Rect music_btutton2 = new Rect(75, 0, 175, 100);
+            if (music_btutton2.contains(px, py))
+                m_Sound_BackGround.start();
+        }
+
+        //int px = (int) event.getX();
+        //int py = (int) event.getY();
         // 게임 준비 중
         if (m_state == STATE_READY) {
             Rect box_btutton = new Rect(275, 150, 275+button_w, 150+button_h);
