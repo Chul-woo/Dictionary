@@ -1,15 +1,13 @@
 package com.example.owen_kim.dictionary.Game;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-import com.example.owen_kim.dictionary.R;
+import android.support.v7.app.AppCompatActivity;
 
 public class Stage3Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stage3);
+        setContentView(new CardGameView(this,3));
     }
 }
