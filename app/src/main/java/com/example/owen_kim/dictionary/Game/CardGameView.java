@@ -27,7 +27,6 @@ import java.util.Set;
 
 public class CardGameView extends View {
     MediaPlayer m_Sound_BackGround; //배경 음악
-    private BackPressCloseSystem backPressCloseSystem;
 
     public static final int STATE_READY = 0; // 게임 시작 전 준비 상태
     public static final int STATE_GAME = 1; // 게임 중
@@ -129,14 +128,14 @@ public class CardGameView extends View {
     }
 
     @Override
-    public boolean onKeyDown(int KeyCode, KeyEvent event) {
-        if(m_Sound_BackGround.isPlaying()){
-            if(KeyCode == KeyEvent.KEYCODE_BACK ) { //BackKey 다운일 경우만 처리
-                m_Sound_BackGround.pause();
-            }
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        setFocusableInTouchMode(true);
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            event.startTracking();
+            m_Sound_BackGround.pause();
+            return true;
         }
-
-        return super.onKeyDown(KeyCode, event);
+        return super.onKeyDown(keyCode, event);
     }
 
     public void SetCardShuffle() {
@@ -209,8 +208,8 @@ public class CardGameView extends View {
         }
 
         //배경음악 시작, 정지 버튼 그리기
-        canvas.drawBitmap(music_start, 75, 7, null);
-        canvas.drawBitmap(music_pause, 200, 0, null);
+        canvas.drawBitmap(music_start, 800, 7, null);
+        canvas.drawBitmap(music_pause, 900, 0, null);
 
         // 카드들을 그려주기 for
         for (int x = 0; x < 2; x++) {
@@ -247,19 +246,17 @@ public class CardGameView extends View {
         int px = (int) event.getX();
         int py = (int) event.getY();
         if(m_Sound_BackGround.isPlaying()){
-            Rect music_btutton = new Rect(200, 0, 300, 100);
+            Rect music_btutton = new Rect(900, 0, 1000, 100);
             if (music_btutton.contains(px, py))
             m_Sound_BackGround.pause();
         }
 
         else{
-            Rect music_btutton2 = new Rect(75, 0, 175, 100);
+            Rect music_btutton2 = new Rect(800, 0, 900, 100);
             if (music_btutton2.contains(px, py))
                 m_Sound_BackGround.start();
         }
 
-        //int px = (int) event.getX();
-        //int py = (int) event.getY();
         // 게임 준비 중
         if (m_state == STATE_READY) {
             Rect box_btutton = new Rect(275, 150, 275+button_w, 150+button_h);
