@@ -36,8 +36,8 @@ public class CardGameView extends View {
     Bitmap m_Card_Backside;
     Bitmap m_BackGroundImage;
     Bitmap m_Start_Button;
-    Bitmap m_Card_Picture_1,  m_Card_Picture_2,  m_Card_Picture_3,  m_Card_Picture_4;
-    Bitmap m_Card_Word_1, m_Card_Word_2, m_Card_Word_3, m_Card_Word_4;
+    Bitmap m_Card_Picture_1,  m_Card_Picture_2,  m_Card_Picture_3;
+    Bitmap m_Card_Word_1, m_Card_Word_2, m_Card_Word_3;
     Bitmap music_start;
     Bitmap music_pause;
 
@@ -106,13 +106,9 @@ public class CardGameView extends View {
         m_Card_Picture_2 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(1), "drawable" , context.getPackageName()));
         m_Card_Word_1 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(0), "drawable" , context.getPackageName()));
         m_Card_Word_2 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(1), "drawable" , context.getPackageName()));
-        if(stage==2 || stage==3) {
+        if(stage==2) {
             m_Card_Picture_3 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(2), "drawable" , context.getPackageName()));
             m_Card_Word_3 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(2), "drawable" , context.getPackageName()));
-        }
-        if(stage==3) {
-            m_Card_Picture_4 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(3), "drawable" , context.getPackageName()));
-            m_Card_Word_4 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(3), "drawable" , context.getPackageName()));
         }
         //이미지 크기 받아오기
         card_w = m_Card_Backside.getWidth();
@@ -230,17 +226,11 @@ public class CardGameView extends View {
                         canvas.drawBitmap(m_Card_Word_1, card_x, card_y, null);
                     else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(1)))
                         canvas.drawBitmap(m_Card_Word_2, card_x, card_y, null);
-                    if(stage==2 || stage==3) {
+                    if(stage==2) {
                         if (m_Shuffle[x][y].m_Color == Card.imageSets.get(imageSets.get(2)))
                             canvas.drawBitmap(m_Card_Picture_3, card_x, card_y, null);
                         else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(2)))
                             canvas.drawBitmap(m_Card_Word_3, card_x, card_y, null);
-                    }
-                    if(stage==3) {
-                        if (m_Shuffle[x][y].m_Color == Card.imageSets.get(imageSets.get(3)))
-                            canvas.drawBitmap(m_Card_Picture_4, card_x, card_y, null);
-                        else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(3)))
-                            canvas.drawBitmap(m_Card_Word_4, card_x, card_y, null);
                     }
                 }
                 // 카드의 뒷면을 그려야 하는 경우

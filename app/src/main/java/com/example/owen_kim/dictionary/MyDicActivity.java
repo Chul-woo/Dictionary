@@ -1,36 +1,29 @@
 package com.example.owen_kim.dictionary;
 
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.owen_kim.dictionary.APIS.MyListAdapter;
-import com.example.owen_kim.dictionary.APIS.list_item;
+import com.example.owen_kim.dictionary.APIS.Diclist_item;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class MyDicActivity extends AppCompatActivity{
 
     ListView listView;
     MyListAdapter myListAdapter;
-    ArrayList<list_item> list_itemArrayList;
+    ArrayList<Diclist_item> list_itemArrayDiclist;
     String[] rows;
     int selectedPos = -1;
     String user;
@@ -41,7 +34,7 @@ public class MyDicActivity extends AppCompatActivity{
         setContentView(R.layout.activity_my_dic);
 
         listView = (ListView)findViewById(R.id.my_listview);
-        list_itemArrayList = new ArrayList<list_item>();
+        list_itemArrayDiclist = new ArrayList<Diclist_item>();
 
         Thread thread = new Thread(){
             String user_id = getIntent().getStringExtra("user_id");
@@ -67,7 +60,7 @@ public class MyDicActivity extends AppCompatActivity{
                         String eng_word = row1[0];
                         String img_route = row1[1];
 
-                        list_itemArrayList.add(new list_item("http://133.186.144.151/uploads/"+img_route+"?user_id='"+user_id+"'",eng_word));
+                        list_itemArrayDiclist.add(new Diclist_item("http://133.186.144.151/uploads/"+img_route+"?user_id='"+user_id+"'",eng_word));
                     }
 
                 } catch (MalformedURLException e) {
@@ -98,7 +91,7 @@ public class MyDicActivity extends AppCompatActivity{
         };
         thread.start();
 
-        myListAdapter = new MyListAdapter(MyDicActivity.this,list_itemArrayList);
+        myListAdapter = new MyListAdapter(MyDicActivity.this, list_itemArrayDiclist);
         listView.setAdapter(myListAdapter);
     }
 

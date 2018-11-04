@@ -16,22 +16,22 @@ import java.util.ArrayList;
 public class MyListAdapter extends BaseAdapter{
 
     Context context;
-    ArrayList<list_item> list_itemArrayList;
+    ArrayList<Diclist_item> list_itemArrayDiclist;
     ViewHolder viewholder;
 
-    public MyListAdapter(Context context, ArrayList<list_item> list_itemArrayList) {
+    public MyListAdapter(Context context, ArrayList<Diclist_item> list_itemArrayDiclist) {
         this.context = context;
-        this.list_itemArrayList = list_itemArrayList;
+        this.list_itemArrayDiclist = list_itemArrayDiclist;
     }
 
     @Override
     public int getCount() {
-        return this.list_itemArrayList.size();
+        return this.list_itemArrayDiclist.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list_itemArrayList.get(position);
+        return list_itemArrayDiclist.get(position);
     }
 
     @Override
@@ -50,9 +50,9 @@ public class MyListAdapter extends BaseAdapter{
         } else{
             viewholder = (ViewHolder)convertView.getTag();
         }
-        viewholder.engname_textView.setText(list_itemArrayList.get(position).getEngname());
+        viewholder.engname_textView.setText(list_itemArrayDiclist.get(position).getEngname());
 
-        Glide.with(context).load(list_itemArrayList.get(position).getDictionary_image()).into(viewholder.dictionary_imageView);
+        Glide.with(context).load(list_itemArrayDiclist.get(position).getDictionary_image()).into(viewholder.dictionary_imageView);
 
         return convertView;
     }

@@ -10,6 +10,10 @@ public class friend_item {
         this.friend_id = friend_id;
     }
 
+    public friend_item(String friend_id){
+        this.friend_id  = friend_id;
+    }
+
     public String getUser_id() {
         return user_id;
     }
@@ -25,6 +29,4 @@ public class friend_item {
     public void setFriend_id(String friend_id) {
         this.friend_id = friend_id;
     }
-
-
 }
