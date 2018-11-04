@@ -1,5 +1,7 @@
 package com.example.owen_kim.dictionary.Game;
 
+import android.widget.Button;
+
 import java.util.HashMap;
 
 public class Card {
@@ -55,5 +57,6 @@ public class Card {
     public Card(double _color){
         m_state = CARD_CLOSE;
         m_Color = _color;
+
     }
 }

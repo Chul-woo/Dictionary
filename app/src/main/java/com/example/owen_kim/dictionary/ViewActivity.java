@@ -12,11 +12,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import static android.speech.tts.TextToSpeech.ERROR;
 
 public class ViewActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 2001;
@@ -59,6 +62,8 @@ public class ViewActivity extends AppCompatActivity {
 
     File f;
 
+    private TextToSpeech tts;
+    ImageButton speaker;
 
     Uri albumURI, photoUri;
     Uri photoURI;
@@ -203,7 +208,7 @@ public class ViewActivity extends AppCompatActivity {
                                             }
                                         });
                                         try {
-                                            thread.sleep(2000);
+                                            thread.sleep(4000);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }finally {
@@ -225,7 +230,29 @@ public class ViewActivity extends AppCompatActivity {
             }
         });
 
+            ////////////////////////
 
+        speaker = (ImageButton) findViewById(R.id.speaker);
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != ERROR) {
+                    // 언어를 선택한다.
+                    tts.setLanguage(Locale.ENGLISH);
+
+                }
+            }
+        });
+
+        speaker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tts.setSpeechRate(0.8f);
+                tts.setPitch(1.3f);
+                tts.speak(engText.getText().toString(),TextToSpeech.QUEUE_FLUSH, null);
+
+            }
+        });
             findViewById(R.id.addDic).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

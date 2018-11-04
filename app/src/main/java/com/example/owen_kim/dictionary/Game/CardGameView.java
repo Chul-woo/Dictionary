@@ -8,11 +8,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
+import com.example.owen_kim.dictionary.APIS.BackPressCloseSystem;
 import com.example.owen_kim.dictionary.R;
 
 import java.util.ArrayList;
@@ -35,6 +38,8 @@ public class CardGameView extends View {
     Bitmap m_Start_Button;
     Bitmap m_Card_Picture_1,  m_Card_Picture_2,  m_Card_Picture_3,  m_Card_Picture_4;
     Bitmap m_Card_Word_1, m_Card_Word_2, m_Card_Word_3, m_Card_Word_4;
+    Bitmap music_start;
+    Bitmap music_pause;
 
     // 화면에 표시할 카드
     Card m_Shuffle[][];
@@ -94,6 +99,8 @@ public class CardGameView extends View {
         m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.pororo);
         m_Card_Backside = BitmapFactory.decodeResource(getResources(), R.drawable.lion);
         m_Start_Button = BitmapFactory.decodeResource(getResources(), R.drawable.start_button);
+        music_start = BitmapFactory.decodeResource(getResources(), R.drawable.start);
+        music_pause = BitmapFactory.decodeResource(getResources(), R.drawable.pause);
 
         m_Card_Picture_1 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier(imageSets.get(0), "drawable" , context.getPackageName()));
         m_Card_Picture_2 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(1), "drawable" , context.getPackageName()));
@@ -125,15 +132,14 @@ public class CardGameView extends View {
     }
 
     @Override
-    public boolean onKeyDown(int KeyCode, KeyEvent event) {
-        // 스페이스 바를 눌렀을 때 배경음 일시 정지/다시 재생
-        if(KeyCode == KeyEvent.KEYCODE_SPACE){
-            if (m_Sound_BackGround.isPlaying())
-                m_Sound_BackGround.pause();
-            else
-                m_Sound_BackGround.start();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        setFocusableInTouchMode(true);
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            event.startTracking();
+            m_Sound_BackGround.pause();
+            return true;
         }
-        return super.onKeyDown(KeyCode, event);
+        return super.onKeyDown(keyCode, event);
     }
 
     public void SetCardShuffle() {
@@ -187,28 +193,32 @@ public class CardGameView extends View {
 
         //시작 버튼, 타이머 그려주기
         if(timeLeftText == "") //시작button
-            canvas.drawBitmap(m_Start_Button, 275, 150, null);
+            canvas.drawBitmap(m_Start_Button, 275, 250, null);
         else if(timeLeftText.equals("START!")) // 게임시작text
-            canvas.drawText(timeLeftText, 200, 200, countdownText);
+            canvas.drawText(timeLeftText, 200, 300, countdownText);
         else if(clear==cards_length) { // 게임성공text
             recordText.setTextSize(50);
             recordText.setColor(Color.BLUE);
-            canvas.drawText(record, 175, 100, recordText) ;
+            canvas.drawText(record, 175, 200, recordText) ;
             countdownText.setColor(Color.RED);
-            canvas.drawText(timeLeftText, 200, 200, countdownText);
+            canvas.drawText(timeLeftText, 200, 300, countdownText);
         }
         else { // 3,2,1 timerText
             countdownText.setTextSize(100);
             countdownText.setStrokeWidth(10);
-            canvas.drawText(timeLeftText, 325, 200, countdownText);
+            canvas.drawText(timeLeftText, 325, 300, countdownText);
         }
+
+        //배경음악 시작, 정지 버튼 그리기
+        canvas.drawBitmap(music_start, 550, 35, null);
+        canvas.drawBitmap(music_pause, 625, 30, null);
 
         // 카드들을 그려주기 for
         for (int x = 0; x < m_Shuffle.length; x++) {
             for (int y = 0; y < m_Shuffle[0].length; y++) {
                 //카드 x,y 좌표 정하기
                 int card_x = 75 + y * 200;
-                int card_y = 250 + x * 300;
+                int card_y = 350 + x * 300;
                 // 카드의 앞면을 그려야 하는 경우
                 if (m_Shuffle[x][y].m_state == Card.CARD_SHOW || m_Shuffle[x][y].m_state == Card.CARD_PLAYEROPEN || m_Shuffle[x][y].m_state == Card.CARD_MATCHED) {
                     // 가지고 있는 색상 값에 따라 다른 이미지 그려주기
@@ -242,11 +252,24 @@ public class CardGameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        //배경음악 시작, 멈춤 버튼
         int px = (int) event.getX();
         int py = (int) event.getY();
+        if(m_Sound_BackGround.isPlaying()){
+            Rect music_btutton = new Rect(625, 0, 700, 100);
+            if (music_btutton.contains(px, py))
+            m_Sound_BackGround.pause();
+        }
+
+        else{
+            Rect music_btutton2 = new Rect(550, 0, 600, 100);
+            if (music_btutton2.contains(px, py))
+                m_Sound_BackGround.start();
+        }
+
         // 게임 준비 중
         if (m_state == STATE_READY) {
-            Rect box_btutton = new Rect(275, 150, 275+button_w, 150+button_h);
+            Rect box_btutton = new Rect(275, 250, 275+button_w, 250+button_h);
             if (box_btutton.contains(px, py)) {
                 timerStart();
                 openCards();
@@ -261,7 +284,7 @@ public class CardGameView extends View {
                 for (int y = 0; y < m_Shuffle[0].length; y++) {
                     //카드 좌표
                     int card_x = 75 + y * 200;
-                    int card_y = 250 + x * 300;
+                    int card_y = 350 + x * 300;
                     //각 카드의 박스 값을 생성
                     Rect box_card = new Rect(card_x, card_y, card_x+card_w, card_y+card_h);
                     // (x,y)에 위치한 카드가 선택되었습니다.
