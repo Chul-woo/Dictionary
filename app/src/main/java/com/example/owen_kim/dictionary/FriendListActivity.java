@@ -35,7 +35,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class FriendListActivity extends AppCompatActivity {
-
     private Button add;
     private ListView listView;
     private FriendViewAdapter adapter;
@@ -45,20 +44,15 @@ public class FriendListActivity extends AppCompatActivity {
     String[] rows;
     String[] users;
     String fid = null;
-
-    boolean validate = false;
-    boolean exist, success2;
-
+    boolean exist;
     RequestQueue queue;
-
+    Response.Listener<String> responseListener2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
-
         Intent intent = getIntent();
         final String user_id = intent.getStringExtra("user_id");
-
         add = (Button) findViewById(R.id.add);
         add_friend_id = (EditText) findViewById(R.id.add_friend_id);
         listView = (ListView) findViewById(R.id.listView);
@@ -71,13 +65,9 @@ public class FriendListActivity extends AppCompatActivity {
                     URL url = new URL("http://133.186.144.151/getFriends.php?user_id='" + user_id + "'");
                     InputStream is = url.openStream();
                     InputStreamReader isr = new InputStreamReader(is);
-
                     BufferedReader reader = new BufferedReader(isr);
-
                     String str = reader.readLine();
-
                     rows = str.split("/");
-
                     for(int i = 0; i<rows.length;i++){
                         fid = rows[i];
                         Log.i("fid: ", fid);
@@ -86,7 +76,6 @@ public class FriendListActivity extends AppCompatActivity {
                             friends.add(fid);
                         }
                     }
-
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                     Log.e("url error: ", e.toString());
@@ -99,24 +88,17 @@ public class FriendListActivity extends AppCompatActivity {
                 }
             }
         });
-
         thread.start();
-
         Log.i("list_friend_item length: ", String.valueOf(list_friend_item.size()));
         adapter = new FriendViewAdapter(this, list_friend_item);
         listView.setAdapter(adapter);
-
         add.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
-
                 final String friend_id = add_friend_id.getText().toString().trim();
                 Log.i("Friend_id: ", friend_id);
-
                 boolean results = friends.contains(friend_id);
                 Log.i("Boolean: ", String.valueOf(results));
-
                 if(friend_id.equals("")){
                     Toast.makeText(getApplicationContext(), "ID를 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
@@ -132,14 +114,12 @@ public class FriendListActivity extends AppCompatActivity {
                     add_friend_id.setText("");
                     return;
                 }
-
-                Response.Listener<String> responseListener2 = new Response.Listener<String>() {
+                responseListener2 = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             boolean success = jsonObject.getBoolean("success");
-
                             if(exist) return;
                             if(success){
                                 Toast.makeText(getApplicationContext(), "추가했습니다", Toast.LENGTH_SHORT).show();
@@ -150,20 +130,17 @@ public class FriendListActivity extends AppCompatActivity {
                             }else{
                                 Toast.makeText(getApplicationContext(), "다시 시도해주세요", Toast.LENGTH_SHORT).show();
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
-
-                AddFriendRequest addFriendRequest = new AddFriendRequest(user_id, friend_id, responseListener2);
-                if(exist) return;
-                else {
-                    queue = Volley.newRequestQueue(FriendListActivity.this);
-                    queue.add(addFriendRequest);
-                }
-
+//                AddFriendRequest addFriendRequest = new AddFriendRequest(user_id, friend_id, responseListener2);
+//                if(exist) return;
+//                else {
+//                    queue = Volley.newRequestQueue(FriendListActivity.this);
+//                    queue.add(addFriendRequest);
+//                }
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -174,109 +151,89 @@ public class FriendListActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "존재하지 않는 ID입니다.", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-
+                            else {
+                                queue.add( new AddFriendRequest(user_id, friend_id, responseListener2));
+                                Toast.makeText(getApplicationContext(), "추가했습니다", Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
-
                 ValidateRequest validateRequest = new ValidateRequest(friend_id, responseListener);
                 queue = Volley.newRequestQueue(FriendListActivity.this);
                 queue.add(validateRequest);
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final TextView textView = (TextView) view.findViewById(R.id.friendIds);
                 final String friend_id = textView.getText().toString().trim();
-
                 Intent toFrDic = new Intent(FriendListActivity.this, FriendDicActivity.class);
                 toFrDic.putExtra("user_id", friend_id);
                 startActivity(toFrDic);
-
             }
         });
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
             @Override
             public boolean onItemLongClick(final AdapterView<?> adapterView, final View view, final int position, long id) {
                 final TextView textView = (TextView) view.findViewById(R.id.friendIds);
                 final String friend_id = textView.getText().toString().trim();
-
                 Log.i("1: ", "1번");
-
                 Response.Listener<String> listener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean success = jsonObject.getBoolean("success");
-
                             Log.i("2: ", "2번");
-
                             //Toast.makeText(getApplicationContext(), String.valueOf(success), Toast.LENGTH_SHORT).show();
-
                             if(success){
                                 Toast.makeText(getApplicationContext(), friend_id + "님이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                                 list_friend_item.remove(position);
                                 adapter.notifyDataSetChanged();
-
                             }else{
                                 return;
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
-
                 DeleteFriendRequest deleteFriendRequest = new DeleteFriendRequest(user_id, friend_id, listener);
                 RequestQueue queue = Volley.newRequestQueue(FriendListActivity.this);
                 queue.add(deleteFriendRequest);
-
                 return true;
             }
         });
     }
-
     class DeleteFriendRequest extends StringRequest {
         final static private String URL = "http://133.186.144.151/deleteFriends1.php";
         private Map<String, String> parameters;
-
         public DeleteFriendRequest(String user_id, String friend_id, Response.Listener<String> listener) {
             super(Method.POST, URL, listener, null);
             parameters = new HashMap<>();
             parameters.put("user_id", user_id);
             parameters.put("friend_id",friend_id);
         }
-
         @Override
         public Map<String, String> getParams() {
             return parameters;
         }
     }
-
     class AddFriendRequest extends StringRequest{
         final static private String URL = "http://133.186.144.151/addFriends.php";
         private Map<String, String> parameters;
-
         public AddFriendRequest(String user_id, String friend_id, Response.Listener<String> listener) {
             super(Method.POST, URL, listener, null);
             parameters = new HashMap<>();
             parameters.put("user_id",user_id);
             parameters.put("friend_id",friend_id);
         }
-
         @Override
         public Map<String, String> getParams() {
             return parameters;
         }
     }
-
-
 }
