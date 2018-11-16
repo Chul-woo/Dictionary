@@ -48,7 +48,7 @@
         <activity android:name=".GameActivity" />
         <activity android:name=".Game.Stage1Activity" />
         <activity android:name=".Game.Stage2Activity" />
-        <activity android:name=".Game.Stage3Activity"></activity>
+        <activity android:name=".FriendListActivity"></activity>
     </application>
 
 </manifest>

@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         bt_FriendDic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this, FriendDicActivity.class);
+                Intent intent1 = new Intent(MainActivity.this, FriendListActivity.class);
                 intent1.putExtra("user_id", user_id);
                 startActivity(intent1);
 

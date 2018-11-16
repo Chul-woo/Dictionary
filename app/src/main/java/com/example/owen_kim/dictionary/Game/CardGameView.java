@@ -19,11 +19,9 @@ import com.example.owen_kim.dictionary.APIS.BackPressCloseSystem;
 import com.example.owen_kim.dictionary.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public class CardGameView extends View {
     MediaPlayer m_Sound_BackGround; //배경 음악
@@ -38,17 +36,14 @@ public class CardGameView extends View {
     Bitmap m_Card_Backside;
     Bitmap m_BackGroundImage;
     Bitmap m_Start_Button;
-    Bitmap m_Card_Picture_1;
-    Bitmap m_Card_Picture_2;
-    Bitmap m_Card_Picture_3;
-    Bitmap m_Card_Word_1;
-    Bitmap m_Card_Word_2;
-    Bitmap m_Card_Word_3;
+    Bitmap m_Card_Picture_1,  m_Card_Picture_2,  m_Card_Picture_3;
+    Bitmap m_Card_Word_1, m_Card_Word_2, m_Card_Word_3;
     Bitmap music_start;
     Bitmap music_pause;
 
     // 화면에 표시할 카드
     Card m_Shuffle[][];
+    private int cards_length;
     List<String> imageSets;
     List<String> wordSets;
 
@@ -66,7 +61,7 @@ public class CardGameView extends View {
 
     //타이머 변수
     private CountDownTimer countDownTimer;
-    private long timeLeftInMilliseconds = 3999; // 3초
+    private long timeLeftInMilliseconds; // 초
     private boolean timerRunning;
     private Paint countdownText = new Paint();
     private String timeLeftText = "";
@@ -77,11 +72,15 @@ public class CardGameView extends View {
     private int clear=0;
     private Paint recordText = new Paint();
     private String record;
+    //스테이지 번호
+    private int stage;
 
-    private Button button1;
-
-    public CardGameView(Context context) {
+    public CardGameView(Context context, int st) {
         super(context);
+        stage=st;
+        timeLeftInMilliseconds = stage*1000+1999;
+        cards_length = 2*(stage+1);
+
         //MediaPlayer를 이용해서 리소스 로드
         m_Sound_BackGround = MediaPlayer.create(context, R.raw.pororo);
         m_Sound_BackGround.start();
@@ -92,7 +91,7 @@ public class CardGameView extends View {
         //랜덤으로 3장 뽑기
         imageSets = new ArrayList<>(Card.imageSets.keySet());
         Collections.shuffle(imageSets);
-        imageSets = imageSets.subList(0,3);
+        imageSets = imageSets.subList(0,stage+1);
         wordSets = new ArrayList<String>();
         for(String s : imageSets)
             wordSets.add(s.replace("image", "word"));
@@ -105,19 +104,20 @@ public class CardGameView extends View {
 
         m_Card_Picture_1 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier(imageSets.get(0), "drawable" , context.getPackageName()));
         m_Card_Picture_2 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(1), "drawable" , context.getPackageName()));
-        m_Card_Picture_3 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(2), "drawable" , context.getPackageName()));
         m_Card_Word_1 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(0), "drawable" , context.getPackageName()));
         m_Card_Word_2 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(1), "drawable" , context.getPackageName()));
-        m_Card_Word_3 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(2), "drawable" , context.getPackageName()));
-
+        if(stage==2) {
+            m_Card_Picture_3 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( imageSets.get(2), "drawable" , context.getPackageName()));
+            m_Card_Word_3 = BitmapFactory.decodeResource(getResources(), context.getResources().getIdentifier( wordSets.get(2), "drawable" , context.getPackageName()));
+        }
         //이미지 크기 받아오기
         card_w = m_Card_Backside.getWidth();
         card_h = m_Card_Backside.getHeight();
         button_w = m_Start_Button.getWidth();
         button_h = m_Start_Button.getHeight();
 
-        //화면에 표시할 카드만큼 할당받음(2X3)
-        m_Shuffle = new Card[2][3];
+        //화면에 표시할 카드만큼 할당받음(2X2)
+        m_Shuffle = new Card[2][stage+1];
 
         // 카드 섞기
         SetCardShuffle();
@@ -140,6 +140,7 @@ public class CardGameView extends View {
 
     public void SetCardShuffle() {
         ArrayList<Double> cards = new ArrayList<Double>();
+        int n=0;
         for(String s : imageSets) {
             double c = Card.imageSets.get(s);
             cards.add(c);
@@ -147,22 +148,20 @@ public class CardGameView extends View {
         }
         Collections.shuffle(cards);
         // 각각의 색을 가진 카드들을 생성
-        m_Shuffle[0][0] = new Card(cards.get(0));
-        m_Shuffle[0][1] = new Card(cards.get(1));
-        m_Shuffle[0][2] = new Card(cards.get(2));
-        m_Shuffle[1][0] = new Card(cards.get(3));
-        m_Shuffle[1][1] = new Card(cards.get(4));
-        m_Shuffle[1][2] = new Card(cards.get(5));
+        for(int i=0; i<m_Shuffle.length; i++) {
+            for(int j=0; j<stage+1; j++) {
+                m_Shuffle[i][j] = new Card(cards.get(n++));
+            }
+        }
     }
 
     public void startGame() {
         // 모든 카드를 뒷면 상태로 만듭니다.
-        m_Shuffle[0][0].m_state = Card.CARD_CLOSE;
-        m_Shuffle[0][1].m_state = Card.CARD_CLOSE;
-        m_Shuffle[0][2].m_state = Card.CARD_CLOSE;
-        m_Shuffle[1][0].m_state = Card.CARD_CLOSE;
-        m_Shuffle[1][1].m_state = Card.CARD_CLOSE;
-        m_Shuffle[1][2].m_state = Card.CARD_CLOSE;
+        for(int i=0; i<m_Shuffle.length; i++) {
+            for(int j=0; j<stage+1; j++) {
+                m_Shuffle[i][j].m_state = Card.CARD_CLOSE;
+            }
+        }
 
         // 화면을 갱신합니다.
         invalidate();
@@ -170,12 +169,11 @@ public class CardGameView extends View {
 
     public void openCards() {
         // 모든 카드를 앞면 상태로 만듭니다.
-        m_Shuffle[0][0].m_state = Card.CARD_SHOW;
-        m_Shuffle[0][1].m_state = Card.CARD_SHOW;
-        m_Shuffle[0][2].m_state = Card.CARD_SHOW;
-        m_Shuffle[1][0].m_state = Card.CARD_SHOW;
-        m_Shuffle[1][1].m_state = Card.CARD_SHOW;
-        m_Shuffle[1][2].m_state = Card.CARD_SHOW;
+        for(int i=0; i<m_Shuffle.length; i++) {
+            for(int j=0; j<stage+1; j++) {
+                m_Shuffle[i][j].m_state = Card.CARD_SHOW;
+            }
+        }
     }
 
     @Override
@@ -191,33 +189,33 @@ public class CardGameView extends View {
 
         //시작 버튼, 타이머 그려주기
         if(timeLeftText == "") //시작button
-            canvas.drawBitmap(m_Start_Button, 275, 150, null);
+            canvas.drawBitmap(m_Start_Button, 275, 250, null);
         else if(timeLeftText.equals("START!")) // 게임시작text
-            canvas.drawText(timeLeftText, 200, 200, countdownText);
-        else if(clear==6) { // 게임성공text
+            canvas.drawText(timeLeftText, 200, 300, countdownText);
+        else if(clear==cards_length) { // 게임성공text
             recordText.setTextSize(50);
             recordText.setColor(Color.BLUE);
-            canvas.drawText(record, 175, 100, recordText) ;
+            canvas.drawText(record, 175, 200, recordText) ;
             countdownText.setColor(Color.RED);
-            canvas.drawText(timeLeftText, 200, 200, countdownText);
+            canvas.drawText(timeLeftText, 200, 300, countdownText);
         }
 
         else { // 3,2,1 timerText
             countdownText.setTextSize(100);
             countdownText.setStrokeWidth(10);
-            canvas.drawText(timeLeftText, 325, 200, countdownText);
+            canvas.drawText(timeLeftText, 325, 300, countdownText);
         }
 
         //배경음악 시작, 정지 버튼 그리기
-        canvas.drawBitmap(music_start, 800, 7, null);
-        canvas.drawBitmap(music_pause, 900, 0, null);
+        canvas.drawBitmap(music_start, 550, 35, null);
+        canvas.drawBitmap(music_pause, 625, 30, null);
 
         // 카드들을 그려주기 for
-        for (int x = 0; x < 2; x++) {
-            for (int y = 0; y < 3; y++) {
+        for (int x = 0; x < m_Shuffle.length; x++) {
+            for (int y = 0; y < m_Shuffle[0].length; y++) {
                 //카드 x,y 좌표 정하기
                 int card_x = 75 + y * 200;
-                int card_y = 250 + x * 300;
+                int card_y = 350 + x * 300;
                 // 카드의 앞면을 그려야 하는 경우
                 if (m_Shuffle[x][y].m_state == Card.CARD_SHOW || m_Shuffle[x][y].m_state == Card.CARD_PLAYEROPEN || m_Shuffle[x][y].m_state == Card.CARD_MATCHED) {
                     // 가지고 있는 색상 값에 따라 다른 이미지 그려주기
@@ -225,14 +223,16 @@ public class CardGameView extends View {
                         canvas.drawBitmap(m_Card_Picture_1, card_x, card_y, null);
                     else if (m_Shuffle[x][y].m_Color == Card.imageSets.get(imageSets.get(1)))
                         canvas.drawBitmap(m_Card_Picture_2, card_x, card_y, null);
-                    else if (m_Shuffle[x][y].m_Color == Card.imageSets.get(imageSets.get(2)))
-                        canvas.drawBitmap(m_Card_Picture_3, card_x, card_y, null);
                     else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(0)))
                         canvas.drawBitmap(m_Card_Word_1, card_x, card_y, null);
                     else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(1)))
                         canvas.drawBitmap(m_Card_Word_2, card_x, card_y, null);
-                    else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(2)))
-                        canvas.drawBitmap(m_Card_Word_3, card_x, card_y, null);
+                    if(stage==2) {
+                        if (m_Shuffle[x][y].m_Color == Card.imageSets.get(imageSets.get(2)))
+                            canvas.drawBitmap(m_Card_Picture_3, card_x, card_y, null);
+                        else if (m_Shuffle[x][y].m_Color == Card.wordSets.get(wordSets.get(2)))
+                            canvas.drawBitmap(m_Card_Word_3, card_x, card_y, null);
+                    }
                 }
                 // 카드의 뒷면을 그려야 하는 경우
                 else
@@ -247,20 +247,20 @@ public class CardGameView extends View {
         int px = (int) event.getX();
         int py = (int) event.getY();
         if(m_Sound_BackGround.isPlaying()){
-            Rect music_btutton = new Rect(900, 0, 1000, 100);
+            Rect music_btutton = new Rect(625, 0, 700, 100);
             if (music_btutton.contains(px, py))
             m_Sound_BackGround.pause();
         }
 
         else{
-            Rect music_btutton2 = new Rect(800, 0, 900, 100);
+            Rect music_btutton2 = new Rect(550, 0, 600, 100);
             if (music_btutton2.contains(px, py))
                 m_Sound_BackGround.start();
         }
 
         // 게임 준비 중
         if (m_state == STATE_READY) {
-            Rect box_btutton = new Rect(275, 150, 275+button_w, 150+button_h);
+            Rect box_btutton = new Rect(275, 250, 275+button_w, 250+button_h);
             if (box_btutton.contains(px, py)) {
                 timerStart();
                 openCards();
@@ -271,11 +271,11 @@ public class CardGameView extends View {
             // 비교하려고 두 개의 카드를 이미 뒤집은 경우
             if (m_SelectCard_1 != null && m_SelectCard_2 != null)
                 return true;
-            for (int x = 0; x < 2; x++) {
-                for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < m_Shuffle.length; x++) {
+                for (int y = 0; y < m_Shuffle[0].length; y++) {
                     //카드 좌표
                     int card_x = 75 + y * 200;
-                    int card_y = 250 + x * 300;
+                    int card_y = 350 + x * 300;
                     //각 카드의 박스 값을 생성
                     Rect box_card = new Rect(card_x, card_y, card_x+card_w, card_y+card_h);
                     // (x,y)에 위치한 카드가 선택되었습니다.
@@ -325,7 +325,7 @@ public class CardGameView extends View {
             m_SelectCard_1 = null;
             m_SelectCard_2 = null;
             clear += 2;
-            if(clear==6) {
+            if(clear==cards_length) {
                 timeLeftText = "CLEAR!";
                 now = System.currentTimeMillis();
                 endTime = new Date(now);
