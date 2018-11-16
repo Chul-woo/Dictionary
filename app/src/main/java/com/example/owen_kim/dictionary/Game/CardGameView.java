@@ -82,7 +82,7 @@ public class CardGameView extends View {
         cards_length = 2*(stage+1);
 
         //MediaPlayer를 이용해서 리소스 로드
-        m_Sound_BackGround = MediaPlayer.create(context, R.raw.pororo);
+        m_Sound_BackGround = MediaPlayer.create(context, R.raw.bgm);
         m_Sound_BackGround.start();
 
         //  키 입력을 위해 포커스를 줍니다.
@@ -96,7 +96,7 @@ public class CardGameView extends View {
         for(String s : imageSets)
             wordSets.add(s.replace("image", "word"));
 
-        m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.pororo);
+        m_BackGroundImage = BitmapFactory.decodeResource(getResources(), R.drawable.cookie);
         m_Card_Backside = BitmapFactory.decodeResource(getResources(), R.drawable.lion);
         m_Start_Button = BitmapFactory.decodeResource(getResources(), R.drawable.start_button);
         music_start = BitmapFactory.decodeResource(getResources(), R.drawable.start);

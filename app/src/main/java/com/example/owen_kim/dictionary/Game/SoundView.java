@@ -16,7 +16,7 @@ public class SoundView extends View {
         super(context);
 
         //MediaPlayer를 이용해서 리소스 로드
-        m_Sound_BackGround = MediaPlayer.create(context, R.raw.pororo);
+        m_Sound_BackGround = MediaPlayer.create(context, R.raw.bgm);
 
         m_Sound_BackGround.start();
 
