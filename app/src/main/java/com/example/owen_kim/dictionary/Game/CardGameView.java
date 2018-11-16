@@ -201,6 +201,7 @@ public class CardGameView extends View {
             countdownText.setColor(Color.RED);
             canvas.drawText(timeLeftText, 200, 200, countdownText);
         }
+
         else { // 3,2,1 timerText
             countdownText.setTextSize(100);
             countdownText.setStrokeWidth(10);
