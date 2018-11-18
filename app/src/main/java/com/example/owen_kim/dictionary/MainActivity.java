@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.owen_kim.dictionary.APIS.BackPressCloseSystem;
 import com.example.owen_kim.dictionary.APIS.PermissionChecker;

@@ -44,7 +44,7 @@
         android:layout_marginBottom="41dp"
         android:layout_marginEnd="42dp"
         android:layout_marginStart="42dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingTop="40dp"
@@ -58,9 +58,12 @@
             android:id="@+id/study"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_bg"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
             android:text="학습하기"
+            android:fontFamily="@font/little_prince"
             tools:layout_editor_absoluteX="92dp"
             tools:layout_editor_absoluteY="230dp" />
 
@@ -68,6 +71,8 @@
             android:id="@+id/game"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_bg"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
             android:text="게임하기" />
@@ -76,6 +81,8 @@
             android:id="@+id/myDic"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_bg"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
             android:text="나의사전" />
@@ -84,9 +91,11 @@
             android:id="@+id/frDic"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
-            android:text="친구사전" />
+            android:text="친구사전"
+            android:background="@drawable/button_bg" />
 
     </LinearLayout>
 
