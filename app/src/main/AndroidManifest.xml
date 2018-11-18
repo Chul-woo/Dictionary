@@ -31,7 +31,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".MyDicActivity" />
+        <activity android:name=".DicActivity" />
         <activity android:name=".ViewActivity" />
         <activity android:name=".FriendDicActivity" />
 

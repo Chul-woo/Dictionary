@@ -36,6 +36,7 @@ import java.util.Map;
 
 public class FriendListActivity extends AppCompatActivity {
     private Button add;
+    private Button delete;
     private ListView listView;
     private FriendViewAdapter adapter;
     private EditText add_friend_id;
@@ -58,6 +59,7 @@ public class FriendListActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         list_friend_item = new ArrayList<>();
         friends = new HashSet<>();
+        delete = (Button) findViewById(R.id.delete_button);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -135,12 +137,6 @@ public class FriendListActivity extends AppCompatActivity {
                         }
                     }
                 };
-//                AddFriendRequest addFriendRequest = new AddFriendRequest(user_id, friend_id, responseListener2);
-//                if(exist) return;
-//                else {
-//                    queue = Volley.newRequestQueue(FriendListActivity.this);
-//                    queue.add(addFriendRequest);
-//                }
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -170,7 +166,7 @@ public class FriendListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final TextView textView = (TextView) view.findViewById(R.id.friendIds);
                 final String friend_id = textView.getText().toString().trim();
-                Intent toFrDic = new Intent(FriendListActivity.this, FriendDicActivity.class);
+                Intent toFrDic = new Intent(FriendListActivity.this, DicActivity.class);
                 toFrDic.putExtra("user_id", friend_id);
                 startActivity(toFrDic);
             }

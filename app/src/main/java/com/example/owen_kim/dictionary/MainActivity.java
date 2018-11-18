@@ -73,33 +73,19 @@ public class MainActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         final String user_id = intent.getStringExtra("user_id");
         //String user_pw = intent.getStringExtra("user_pw");
-        //user_name = intent.getStringExtra("user_name");
-
-        user_name = getIntent().getExtras().getString("user_name");
+        user_name = intent.getStringExtra("user_name");
         user.setId(user_name);
         nameText.setText(user.getId());
         uid = user_name;
-
-        //final SharedPreferences sf = getSharedPreferences(user_name,0);
-        //final String str = sf.getString("name","");
-        //nameText.setText(str);
 
 
         //로그인화면 액티비티 이동
         bt_Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                //startActivity(intent);
-
                 logout();
-
             }
         });
-
-        //if(user_name != null){
-        //    nameText.setText(user_name);
-       // }
 
         //학습하기화면 액티비티 이동
         bt_Study.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ViewActivity.class);
                 intent.putExtra("user_id", user_id);
+                intent.putExtra("user_name", user_name);
                 startActivity(intent);
 
             }
@@ -126,8 +113,9 @@ public class MainActivity extends AppCompatActivity {
         bt_MyDic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,MyDicActivity.class);
+                Intent intent = new Intent(MainActivity.this,DicActivity.class);
                 intent.putExtra("user_id",user_id);
+                intent.putExtra("user_name", user_name);
                 startActivity(intent);
             }
         });
@@ -135,9 +123,9 @@ public class MainActivity extends AppCompatActivity {
         bt_FriendDic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(MainActivity.this, FriendListActivity.class);
-                intent1.putExtra("user_id", user_id);
-                startActivity(intent1);
+                Intent intent = new Intent(MainActivity.this, FriendListActivity.class);
+                intent.putExtra("user_id", user_id);
+                startActivity(intent);
 
             }
         });
@@ -226,30 +214,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //dialogBuilder.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
-        //    @Override
-        //    public void onClick(DialogInterface dialog, int which) {
-        //        startAppSettings();
-        //    }
-        //});
-
         dialogBuilder.show();
     }
-/*
-    private void startAppSettings() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse(PACKAGE_URL_SCHEME + getPackageName()));
-    }
-*/
-/*
-    //권한 획득에 동의를 하지 않았을 경우 아래 Toast 메세지를 띄우며 해당 Activity를 종료시킵니다.
-    private void showNoPermissionToastAndFinish() {
-
-        Toast.makeText(this, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
-        finish();
-
-    }
-*/
 
 
 

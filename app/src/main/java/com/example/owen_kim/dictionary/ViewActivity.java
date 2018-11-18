@@ -55,7 +55,7 @@ public class ViewActivity extends AppCompatActivity {
 
     static String mCurrentPhotoPath;
     String imageFilePath = null;
-    String user_id;
+    String user_id, user_name;
     static String photopath;
 
     URL url;
@@ -257,7 +257,9 @@ public class ViewActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                         String[] img_routes = mCurrentPhotoPath.split("/");
-                        user_id = getIntent().getStringExtra("user_id");
+                        Intent intent = getIntent();
+                        user_id = intent.getStringExtra("user_id");
+                        user_name = intent.getStringExtra("user_name");
                         String eng_word = engText.getText().toString();
 
                         String img_route;
@@ -278,8 +280,9 @@ public class ViewActivity extends AppCompatActivity {
                                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                                     // 확인 버튼 클릭시 설정
                                                     public void onClick(DialogInterface dialog, int whichButton) {
-                                                        Intent intent = new Intent(ViewActivity.this, MyDicActivity.class);
+                                                        Intent intent = new Intent(ViewActivity.this, DicActivity.class);
                                                         intent.putExtra("user_id", user_id);
+                                                        intent.putExtra("user_name", user_name);
                                                         ViewActivity.this.startActivity(intent);
                                                     }
                                                 })

@@ -58,6 +58,16 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:id="@+id/album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/cam"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="435dp" />
+
+        <ImageButton
             android:id="@+id/send"
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
@@ -66,16 +76,6 @@
             app:srcCompat="@drawable/study"
             tools:layout_editor_absoluteX="127dp"
             tools:layout_editor_absoluteY="437dp" />
-
-        <ImageButton
-            android:id="@+id/album"
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/cam"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="435dp" />
 
         <ImageButton
             android:id="@+id/addDic"
