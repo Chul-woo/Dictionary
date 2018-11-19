@@ -5,19 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.owen_kim.dictionary.APIS.FriendViewAdapter;
 import com.example.owen_kim.dictionary.APIS.friend_item;
+import com.example.owen_kim.dictionary.Requests.AddFriendRequest;
 import com.example.owen_kim.dictionary.Requests.ValidateRequest;
 
 import org.json.JSONException;
@@ -30,9 +28,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 public class FriendListActivity extends AppCompatActivity {
     private Button add;
@@ -43,7 +39,6 @@ public class FriendListActivity extends AppCompatActivity {
     ArrayList<friend_item> list_friend_item;
     HashSet<String> friends;
     String[] rows;
-    String[] users;
     String fid = null;
     boolean exist;
     RequestQueue queue;
@@ -74,7 +69,7 @@ public class FriendListActivity extends AppCompatActivity {
                         fid = rows[i];
                         Log.i("fid: ", fid);
                         if(!(fid.equals(""))) {
-                            list_friend_item.add(new friend_item(fid));
+                            list_friend_item.add(new friend_item(user_id, fid));
                             friends.add(fid);
                         }
                     }
@@ -126,7 +121,7 @@ public class FriendListActivity extends AppCompatActivity {
                             if(success){
                                 Toast.makeText(getApplicationContext(), "추가했습니다", Toast.LENGTH_SHORT).show();
                                 add_friend_id.setText("");
-                                list_friend_item.add(new friend_item(friend_id));
+                                list_friend_item.add(new friend_item(user_id, friend_id));
                                 friends.add(friend_id);
                                 adapter.notifyDataSetChanged();
                             }else{
@@ -161,75 +156,15 @@ public class FriendListActivity extends AppCompatActivity {
                 queue.add(validateRequest);
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final TextView textView = (TextView) view.findViewById(R.id.friendIds);
-                final String friend_id = textView.getText().toString().trim();
-                Intent toFrDic = new Intent(FriendListActivity.this, DicActivity.class);
-                toFrDic.putExtra("user_id", friend_id);
-                startActivity(toFrDic);
-            }
-        });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(final AdapterView<?> adapterView, final View view, final int position, long id) {
-                final TextView textView = (TextView) view.findViewById(R.id.friendIds);
-                final String friend_id = textView.getText().toString().trim();
-                Log.i("1: ", "1번");
-                Response.Listener<String> listener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean success = jsonObject.getBoolean("success");
-                            Log.i("2: ", "2번");
-                            //Toast.makeText(getApplicationContext(), String.valueOf(success), Toast.LENGTH_SHORT).show();
-                            if(success){
-                                Toast.makeText(getApplicationContext(), friend_id + "님이 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                                list_friend_item.remove(position);
-                                adapter.notifyDataSetChanged();
-                            }else{
-                                return;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                DeleteFriendRequest deleteFriendRequest = new DeleteFriendRequest(user_id, friend_id, listener);
-                RequestQueue queue = Volley.newRequestQueue(FriendListActivity.this);
-                queue.add(deleteFriendRequest);
-                return true;
-            }
-        });
-    }
-    class DeleteFriendRequest extends StringRequest {
-        final static private String URL = "http://133.186.144.151/deleteFriends1.php";
-        private Map<String, String> parameters;
-        public DeleteFriendRequest(String user_id, String friend_id, Response.Listener<String> listener) {
-            super(Method.POST, URL, listener, null);
-            parameters = new HashMap<>();
-            parameters.put("user_id", user_id);
-            parameters.put("friend_id",friend_id);
-        }
-        @Override
-        public Map<String, String> getParams() {
-            return parameters;
-        }
-    }
-    class AddFriendRequest extends StringRequest{
-        final static private String URL = "http://133.186.144.151/addFriends.php";
-        private Map<String, String> parameters;
-        public AddFriendRequest(String user_id, String friend_id, Response.Listener<String> listener) {
-            super(Method.POST, URL, listener, null);
-            parameters = new HashMap<>();
-            parameters.put("user_id",user_id);
-            parameters.put("friend_id",friend_id);
-        }
-        @Override
-        public Map<String, String> getParams() {
-            return parameters;
-        }
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                final TextView textView = (TextView) view.findViewById(R.id.friendIds);
+//                final String friend_id = textView.getText().toString().trim();
+//                Intent toFrDic = new Intent(FriendListActivity.this, DicActivity.class);
+//                toFrDic.putExtra("user_id", friend_id);
+//                startActivity(toFrDic);
+//            }
+//        });
     }
 }

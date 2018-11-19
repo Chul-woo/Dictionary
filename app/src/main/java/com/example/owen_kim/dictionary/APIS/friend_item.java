@@ -5,8 +5,8 @@ public class friend_item {
     private String user_id;
     private String friend_id;
 
-    public friend_item(String s, String friend_id) {
-        user_id = s;
+    public friend_item(String user_id, String friend_id) {
+        this.user_id = user_id;
         this.friend_id = friend_id;
     }
 

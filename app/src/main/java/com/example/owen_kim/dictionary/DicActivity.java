@@ -41,8 +41,8 @@ public class DicActivity extends AppCompatActivity{
 
         final Intent intent = getIntent();
         String user_name = intent.getStringExtra("user_name");
-        if(user_name==null) {
-            user_name = intent.getStringExtra("user_id");
+        if(user_name == null) {
+            intent.getStringExtra("friend_id");
         }
 
         userDic.setText(user_name + "님의 사전입니다.");
@@ -70,8 +70,9 @@ public class DicActivity extends AppCompatActivity{
 
                         String eng_word = row1[0];
                         String img_route = row1[1];
+                        //int id = row1[2];
 
-                        list_itemArrayDiclist.add(new Diclist_item("http://133.186.144.151/uploads/"+img_route+"?user_id='"+user_id+"'",eng_word));
+                        list_itemArrayDiclist.add(new Diclist_item("http://133.186.144.151/uploads/"+img_route+"?user_id='"+user_id+"'", eng_word, 11111111));
                     }
 
                 } catch (MalformedURLException e) {
