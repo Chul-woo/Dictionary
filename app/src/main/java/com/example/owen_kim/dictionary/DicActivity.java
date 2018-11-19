@@ -27,7 +27,7 @@ public class DicActivity extends AppCompatActivity{
     ArrayList<Diclist_item> list_itemArrayDiclist;
     String[] rows;
     int selectedPos = -1;
-    String user;
+    String user_id;
     TextView userDic;
 
     @Override
@@ -39,16 +39,17 @@ public class DicActivity extends AppCompatActivity{
         list_itemArrayDiclist = new ArrayList<Diclist_item>();
         userDic = (TextView)findViewById(R.id.user_dic);
 
-        final Intent intent = getIntent();
+        Intent intent = getIntent();
         String user_name = intent.getStringExtra("user_name");
+        user_id = getIntent().getStringExtra("user_id");
         if(user_name == null) {
-            intent.getStringExtra("friend_id");
+            user_name = intent.getStringExtra("friend_id");
+            user_id = user_name;
         }
 
         userDic.setText(user_name + "님의 사전입니다.");
 
         Thread thread = new Thread(){
-            String user_id = getIntent().getStringExtra("user_id");
 
             @Override
             public void run() {
