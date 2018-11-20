@@ -308,22 +308,17 @@ public class CardGameView extends View {
         return true;
     }
 
-    public void checkMatch(){
+    public synchronized void checkMatch(){
         // 두 카드 중 하나라도 선택이 안 되었다면 비교할 필요가 없습니다.
         if(m_SelectCard_1 == null || m_SelectCard_2 == null)
             return;
         // 두 카드의 색상을 비교합니다.
         if((int)m_SelectCard_1.m_Color == (int)m_SelectCard_2.m_Color){
+            Thread.yield();
             // 두 카드의 색상이 같으면 두 카드를 맞춘 상태로 바꿉니다.
             m_SelectCard_1.m_state = Card.CARD_MATCHED;
             m_SelectCard_2.m_state = Card.CARD_MATCHED;
 
-            // 화면을 갱신합니다.
-            postInvalidate();
-
-            // 다시 선택할 수 있게 null 값을 넣습니다.
-            m_SelectCard_1 = null;
-            m_SelectCard_2 = null;
             clear += 2;
             if(clear==cards_length) {
                 timeLeftText = "CLEAR!";
@@ -342,15 +337,13 @@ public class CardGameView extends View {
             // 두 카드를 이전처럼 뒷면으로 돌려줍니다.
             m_SelectCard_1.m_state = Card.CARD_CLOSE;
             m_SelectCard_2.m_state = Card.CARD_CLOSE;
-
-            // 화면을 갱신합니다.
-            postInvalidate();
-
-            // 다시 선택할 수 있게 null 값을 넣습니다.
-            m_SelectCard_1 = null;
-            m_SelectCard_2 = null;
-
         }
+
+        // 화면을 갱신합니다.
+        postInvalidate();
+        // 다시 선택할 수 있게 null 값을 넣습니다.
+        m_SelectCard_1 = null;
+        m_SelectCard_2 = null;
     }
 
     public void timerStart() {
