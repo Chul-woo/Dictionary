@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DeleteFriendRequest extends StringRequest {
-    final static private String URL = "http://133.186.144.151/deleteFriends1.php";
+    final static private String URL = "http://133.186.144.151/deleteFriends.php";
     private Map<String, String> parameters;
     public DeleteFriendRequest(String user_id, String friend_id, Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);

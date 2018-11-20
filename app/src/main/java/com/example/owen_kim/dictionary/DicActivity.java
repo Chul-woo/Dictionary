@@ -71,9 +71,9 @@ public class DicActivity extends AppCompatActivity{
 
                         String eng_word = row1[0];
                         String img_route = row1[1];
-                        //int id = row1[2];
+                        int id = Integer.parseInt(row1[2]);
 
-                        list_itemArrayDiclist.add(new Diclist_item("http://133.186.144.151/uploads/"+img_route+"?user_id='"+user_id+"'", eng_word, 11111111));
+                        list_itemArrayDiclist.add(new Diclist_item("http://133.186.144.151/uploads/"+img_route+"?user_id='"+user_id+"'", eng_word, id));
                     }
 
                 } catch (MalformedURLException e) {

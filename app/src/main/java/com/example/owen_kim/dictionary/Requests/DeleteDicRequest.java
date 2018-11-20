@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DeleteDicRequest extends StringRequest {
-    final static private String URL = "http://133.186.144.151/deleteDic.php";
+    final static private String URL = "http://133.186.144.151/deleteDictionary.php";
     private Map<String, String> parameters;
     public DeleteDicRequest(String id, Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);
