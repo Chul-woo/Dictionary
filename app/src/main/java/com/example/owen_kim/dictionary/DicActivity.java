@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.owen_kim.dictionary.APIS.DicAdapter;
 import com.example.owen_kim.dictionary.APIS.Diclist_item;
+import com.example.owen_kim.dictionary.APIS.FriDicAdapter;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,10 +26,11 @@ public class DicActivity extends AppCompatActivity{
 
     ListView listView;
     DicAdapter dicAdapter;
+    FriDicAdapter fridicAdapter;
     ArrayList<Diclist_item> list_itemArrayDiclist;
     String[] rows;
     int selectedPos = -1;
-    String user_id;
+    String user_id, friend_id;
     TextView userDic;
 
     @Override
@@ -104,8 +107,15 @@ public class DicActivity extends AppCompatActivity{
         };
         thread.start();
 
-        dicAdapter = new DicAdapter(DicActivity.this, list_itemArrayDiclist);
-        listView.setAdapter(dicAdapter);
+        if(intent.getStringExtra("friend_id") == null) {
+            dicAdapter = new DicAdapter(DicActivity.this, list_itemArrayDiclist);
+            listView.setAdapter(dicAdapter);
+        }
+        else {
+            fridicAdapter = new FriDicAdapter(DicActivity.this, list_itemArrayDiclist);
+            listView.setAdapter(fridicAdapter);
+        }
+
     }
 
 
